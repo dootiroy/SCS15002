@@ -1,0 +1,78 @@
+\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+%\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+%
+\usepackage{graphicx}
+\usepackage[latin9]{inputenc}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{esint}
+\usepackage{array}
+\usepackage[colorlinks=true, urlcolor=citecolor, linkcolor=citecolor, citecolor=citecolor]{hyperref}
+%\usepackage{subcaption}
+\usepackage{subfig}
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\newcommand{\X}{{\mathsf{X}}}
+
+%
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
+%
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+%
+% Insert the name of "your journal" with
+% \journalname{myjournal}
+%
+\begin{document}
+
+\title{Bayesian analysis of survival data under generalized extreme value distribution with application in cure rate model}
+%\subtitle{Do you have a subtitle?\\ If so, write it here}
+
+\titlerunning{Bayesian analysis of survival data with GEV}        % if too long for running head
+
+\author{Dooti Roy$^{1}$         \and
+        Vivekananda Roy$^{2}$  \and
+        Dipak K. Dey$^{1}$
+}
+
+\authorrunning{D. Roy, V. Roy and D. K. Dey} % if too long for running head
+
+\institute{Dooti Roy \at
+              $^{1}$Department of Statistics,University of Connecticut, Storrs, Connecticut \\
+              \email{deydipak@gmail.com}           %  \\
+%             \emph{Present address:} of F. Author  %  if needed
+           \and
+          Vivekananda Roy \at
+              $^{2}$Department of Statistics and Statistical Laboratory, Iowa State University, Ames, IA
+}
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
+
+\maketitle
+
+\begin{abstract}
+This paper introduces both maxima and minima generalized extreme value (GEV) distribution
+to analyze right-censored survival data with a cure fraction. Our proposed GEV model leads to extremely flexible hazard functions. Our proposed Bayesian model achieves proper posterior distribution under some weak conditions when improper priors are used. We further provide theoretical and numerical results showing that our GEV models offer a richer class of models than the widely used Weibull models. Finally, a glioblastoma multiforme cancer data is analyzed to illustrate the proposed GEV model.
+\keywords{Cure fraction \and Generalized extreme value distribution \and Gibb's sampler \and MCMC \and Metropolis Hastings \and Survival analysis \and Real data analysis \and Seer \and Glioblastoma Multiforme \and Melanoma of the skin}
+% \PACS{PACS code1 \and PACS code2 \and more}
+% \subclass{MSC code1 \and MSC code2 \and more}
+\end{abstract}
+
+
+
+\end{document}
+% end of file template.tex
