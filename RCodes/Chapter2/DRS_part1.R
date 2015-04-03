@@ -154,3 +154,5 @@ expression(phi[1]*' = '*'1'),expression(phi[1]*' = '*'1.8'),expression(phi[1]*' 
 ,lty = c(1,1,1,1,1),col= c("red","blue","black","orange","green"))
 
 dev.off()
+
+# Lets test our Git repo
