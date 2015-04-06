@@ -1,5 +1,5 @@
 \documentclass[11pt]{article}
-\usepackage{amsbsy,amsmath,amsthm,amssymb,times,graphicx,enumerate,subfig,color,bbm}
+\usepackage{amsbsy,amsmath,amsthm,amssymb,times,graphicx,enumerate,subfig,color,bbm,float}
 \usepackage[latin9]{inputenc}
 \usepackage{authblk}
 \usepackage[round]{natbib}
@@ -47,6 +47,8 @@
 \newcommand{\xn}{\{X_n\}_{n\ge 0}}
 \newcommand{\p}{{\boldsymbol{p}}}
 \newcommand{\bt}{{\boldsymbol{\theta}}}
+\newcommand{\bth}{{\boldsymbol{\theta_1}}}
+\newcommand{\bthe}{{\boldsymbol{\theta_2}}}
 
 \newcommand{\x}{{\boldsymbol{x}}}
 \newcommand{\y}{{\boldsymbol{y}}}
@@ -72,7 +74,7 @@
 \begin{document}
 \providecommand{\keywords}[1]{\textbf{\textit{Keywords: }} #1}
 %\title{Analysis of Bivariate Survival Data based on copulas with log Generalized Extreme Value marginals}
-%\author{Dooti Roy, Vivekananda Roy and Dipak Kumar Dey}
+%\author{Dooti Roy, Vivekananda Roy and Dipak Dey}
 \maketitle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
@@ -85,8 +87,8 @@ This chapter introduces a novel copula based methodology to analyze right censor
 \label{sec:intr}
 \noindent
 During the last two decades, there have been a growing interest in modeling paired data or bivariate survival data which arises primarily from the field of medicine. For example, it has been medically observed that incidence of one disease often increases the risk of another in a patient affected by Human Immunodeficiency Virus. Diabetic retinopathy is the leading cause of blindness in United States. It has been observed that once one eye gets affected, the chances of the other eye contracting the disease increases many fold. \cite{clayton:1978} and \cite{oakes:1982} were the first to develop a fully parametric approach to model bivariate survival data. In \cite{huster:brookmeyer:self:1989}, the authors extended the fully parametric approach to include censored bivariate paired data with covariates. Since then, between year 1985 to year 1999, several methods using both parametric and semiparametric modeling techniques have been introduced and developed by authors such as: \cite{nelson:1986}, \cite{oakes:1986}, \cite{shih:louis:1995}, \cite{genest:1993} and \cite{wang:wells:2000} among others. Employing copula to model dependency between marginal survival data have been particularly popular since the univariate marginals do not depend on the choice of the dependency structure and can be consequently estimated separately from the dependency parameters.\\
-Bayesian methods to model bivariate survival data started developing since early 20's. In \cite{sahu:dey:2000}, the authors used a Bayesian frailty model to model bivariate survival data with covariates. \cite{chen:ibra:sinh:2002} introduced a Bayesian model for right censored bivariate survival data with cure fraction. Another interesting work is by \cite{shem:youn:2000}, where the authors develop a Bayesian joint survival model for life insurance data. In \cite{romeo:tanaka:2006}, the authors used a copula based Bayesian framework to model bivariate survival data. Since choosing an appropriate prior for the dependency parameter of any copula is not intuitive, the authors put a $\beta$-prior on the Kendall's $\tau$ instead. Although these methods are fairly attractive since they are mostly identifiable and produces smooth survival functions, they are not time efficient.
-Running MCMC algorithm can be expensive especially when for each individual value of selected $\tau$, MCMC chains for the univariate marginal parameters have to be run. In this paper, we propose a novel empirical Bayes method of estimating the dependency parameter. Unlike previous works, our method requires only two runs of MCMC chain for the marginal parameters. Our goal is to develop a Bayesian framework for inference and estimation of the marginals and the dependence parameter following the approach outlined in \cite{doss:2010} and \cite{roy:2014} using Clayton copula structure and the flexible Generalized Extreme Value (GEV) distribution to model the marginal distributions. The chapter is organized as follows: Section \ref{sec:intr} provides a brief introduction to the problem and current methods are outlined including their roadblocks and restrictions. In section \ref{sec:cop}, the concept of copula, their properties and different types of copulas have been discussed. In section \ref{sec:marg}, the model settings are described. Our proposed method is outlined in details in section \ref{sec:method}. Section \ref{sec:sim} provides background and results of simulation studies. A real data analysis is provided in the section \ref{sec:drs}. The chapter concludes with future work directions and limitations.
+Bayesian methods to model bivariate survival data started developing since early 20's. In \cite{sahu:dey:2000}, the authors used a Bayesian frailty model to model bivariate survival data with covariates. \cite{chen:ibra:sinh:2002} introduced a Bayesian model for right censored bivariate survival data with cure fraction. Another interesting work is by \cite{shem:youn:2000}, where the authors develop a Bayesian joint survival model for life insurance data. In \cite{romeo:tanaka:2006}, the authors used a copula based Bayesian framework to model bivariate survival data. Since choosing an appropriate prior for the dependency parameter of any copula is not intuitive, the authors put a $\beta$-prior on the Kendall's $\tau$ instead. Although these methods are fairly attractive since they are mostly identifiable and produces smooth survival functions, they are not computationally time efficient.
+Running MCMC algorithm can be expensive especially when for each individual value of selected $\tau$, MCMC chains for the univariate marginal parameters have to be run. In this chapter, we propose a novel empirical Bayes method of estimating the dependency parameter. Unlike previous works, our method requires only two runs of MCMC chain for the marginal parameters. Our goal is to develop a Bayesian framework for inference and estimation of the marginals and the dependence parameter following the approach outlined in \cite{doss:2010} and \cite{roy:2014} using Clayton copula structure and the flexible Generalized Extreme Value (GEV) distribution to model the marginal distributions. The chapter is organized as follows: Section \ref{sec:intr} provides a brief introduction to the problem and current methods are outlined including their roadblocks and restrictions. In section \ref{sec:cop}, the concept of copula, their properties and different types of copulas have been discussed. In section \ref{sec:marg}, the model settings are described. Our proposed method is outlined in details in section \ref{sec:method}. Section \ref{sec:sim} provides background and results of simulation studies. A real data analysis is provided in the section \ref{sec:drs}. The chapter concludes with future work directions and limitations.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{A Brief Overview of Copula}
 \label{sec:cop}
@@ -115,7 +117,7 @@ where $\Delta_{a_k}^{b_k}$ defines the first order differences as
 \]
 \end{enumerate}
 \noindent
-The first and third property are satisfied if $C(u)$ is a distribution function. The second property is satisfied if the marginal distributions of $C$ are uniform. Using copulas to model dependent bivariate data is advantageous due to many reasons. Copula structure being extremely flexible, allows non-linear dependence between the two associated marginal distributions, or to measure dependence for heavy tailed distributions. It can be used under fully parametric, semi parametric or non parametric setting and also allows for faster computations. Several families of copula have been studied in details, for example: Gaussian copulas, Clayton copulas, Frank copula, Gumbel copula etc. Copula's are chosen depending on the tail concentrations. In this chapter, Clayton copula is chosen to develop the framework and model the Diabetes Retinopathy Study data, since the copula has a nice relationship with the Kendall's $\tau$· Further, \cite{romeo:tanaka:2006} have shown that Clayton copula performs reasonably well on the same real data.
+The first and third properties are satisfied if $C(u)$ is a distribution function. The second property is satisfied if the marginal distributions of $C$ are uniform. Using copulas to model dependent bivariate data is advantageous due to many reasons. Copula structure being extremely flexible, allows non-linear dependence between the two associated marginal distributions, or to measure dependence for heavy tailed distributions. It can be used under fully parametric, semi parametric or non parametric setting and also allows for faster computations. Several families of copula have been studied in details, for example: Gaussian copulas, Clayton copulas, Frank copula, Gumbel copula etc. Copula's are chosen depending on the tail concentrations. In this chapter, Clayton copula is chosen to develop the framework and model the Diabetes Retinopathy Study data, since the copula has a nice relationship with the Kendall's $\tau$. Further, \cite{romeo:tanaka:2006} have shown that Clayton copula performs reasonably well on the same real data.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Marginal Distributions and Bivariate Survival Model}
 \label{sec:marg}
@@ -156,7 +158,7 @@ times. We use the popular bivariate copula from the Clayton family which is give
   \label{eq:clay}
   C_\phi (u_1, u_2) = \mbox{max} \{(u_1^{-\phi} + u_2^{-\phi} - 1)^{-1/\phi}, 0\} .
 \end{equation}
-In this case $G= (-1, \infty)\setminus \{0\}$. One of the major goals while studying bivariate data is to gauge the direction and extent of the association between the two variables. When linear correlation coefficient is not a valid measure of association due to nonlinearity of the association, Kendal's $\tau$ and Spearman's $\rho$ are two most popular measures of pairwise concordance \cite[][chapter 5]{nelson:1999}. Certain families of copula have very nice relationship with Kendal's $\tau$. For example, in case of Clayton copula family, the Kendal's $\tau$ measure is given by
+In this case $G= (-1, \infty)\setminus \{0\}$. One of the major goals while studying bivariate data is to gauge the direction and extent of the association between the two variables. When linear correlation coefficient is not a valid measure of association due to nonlinearity of the association, Kendall's $\tau$ and Spearman's $\rho$ are two most popular measures of pairwise concordance \cite[][chapter 5]{nelson:1999}. Certain families of copula have very nice relationship with Kendall's $\tau$. For example, in case of Clayton copula family, the Kendall's $\tau$ measure is given by
 \[
 \tau_\phi = \frac{\phi}{\phi+2} \in (-1,1).
 \]
@@ -170,80 +172,80 @@ event for the $i$th subject, $j=1, 2; i=1, 2,\dots, n$. We assume
 $(T_{i1}, T_{i2})$ and $(C_{i1}, C_{i2})$ are independent for
 $i=1, 2,\dots, n$. We also assume that $(T_{i1}, T_{i2})$, are iid
 with common pdf $f(t_1, t_2)$ and survival time $S(t_1, t_2)$, $i=1, 2,\dots, n$.
-The observed data is $(\oy, \ty, \ode, \tde)$ where
+The observed data is $(\oy, \ty, \ode, \tde)$, where
 $\oy=(y_{11}, y_{21},\dots,y_{n1}), \ty=(y_{12}, y_{22},\dots,y_{n2}),
 \ode=(\delta_{11}, \delta_{21},\dots,\delta_{n1})$, and
 $\tde=(\delta_{12}, \delta_{22},\dots, \delta_{n2})$, with $y_{ij}
 = \log(min (T_{ij}, C_{ij}))$ and $\delta_{ij}= I(y_{ij} = \log T_{ij})$ for
-$j=1, 2; i=1, 2,\dots, n$. Let $\y =(\oy, \ty),$ and $\de =(\ode,
+$j=1, 2; i=1, 2,\dots, n$. Let $\y =(\oy, \ty)$ and $\de =(\ode,
 \tde)$.  Let $(S_1, S_2)$ and $(f_1, f_2)$ be the marginal survival
 and density functions of GEV distribution as given in Section
-\ref{sec:marg}.  Let $\theta_1$ and $\theta_2$
+\ref{sec:marg}.  Let $\mathbf{\bth}$ and $\mathbf{\bthe}$
 be the parameters associated with each of the marginal distribution.
-So, $\theta_i = (\mu_i, \sigma_i, \xi_i)$, $i = 1,2$. where $\mu,
-\sigma$, and $\xi$ are location, scale and shape parameters of the
-marginal GEV distributions. \\ Then the complete data likelihood function  of the parameters $(\theta_1, \theta_2, \phi)$ can be written as (see also \cite{chen:2012}):
+So, $\bt_i = (\mu_i, \sigma_i, \xi_i)$, $i = 1,2$. where $\mu,
+\sigma$, and $\xi$ are location, scale and shape parameters respectively of the
+marginal GEV distributions. \\ Then the complete data likelihood function (joint distribution) of the parameters $(\mathbf{\bth, \bthe}, \phi)$ can be written as (see also \cite{chen:2012}):
 \begin{eqnarray}
   \label{eq:lik}
-  L(\theta_1, \theta_2, \phi | \y, \de) &=& \prod_{i=1}^n (f(y_{i1}, y_{i2}))^{\delta_{i1} \delta_{i2}}
+  L(\bth, \bthe, \phi | \y, \de) &=& \prod_{i=1}^n (f(y_{i1}, y_{i2}))^{\delta_{i1} \delta_{i2}}
 \Big(\frac{\partial S(y_{i1}, y_{i2})}{\partial y_{i1}}\Big)^{\delta_{i1} (1- \delta_{i2})}
 \Big(\frac{\partial S(y_{i1}, y_{i2})}{\partial y_{i2}}\Big)^{(1- \delta_{i1}) \delta_{i2}}
 \nonumber\\
 && (S(y_{i1}, y_{i2}))^{(1-\delta_{i1}) (1-\delta_{i2})} \nonumber\\
-&=& \prod_{i=1}^n (c_\phi(S_{1 \theta_1} (y_{i1}), S_{2 \theta_2}(y_{i2})) f_{1 \theta_1}(y_{i1}), f_{2 \theta_2}(y_{i2}))^{\delta_{i1} \delta_{i2}}\nonumber\\
-&&\Big(-\frac{\partial C_\phi(S_{1 \theta_1} (y_{i1}), S_{2 \theta_2}(y_{i2}))}{\partial S_{1 \theta_1} (y_{i1})}(-f_{1 \theta_1}(y_{i1}))\Big)^{\delta_{i1} (1- \delta_{i2})}\nonumber\\
+&=& \prod_{i=1}^n (c_\phi(S_{1 \bth} (y_{i1}), S_{2 \bthe}(y_{i2})) f_{1 \bth}(y_{i1}), f_{2 \bthe}(y_{i2}))^{\delta_{i1} \delta_{i2}}\nonumber\\
+&&\Big(-\frac{\partial C_\phi(S_{1 \bth} (y_{i1}), S_{2 \bthe}(y_{i2}))}{\partial S_{1 \bth} (y_{i1})}(-f_{1 \bth}(y_{i1}))\Big)^{\delta_{i1} (1- \delta_{i2})}\nonumber\\
 &&
-\Big(-\frac{\partial C_\phi(S_{1 \theta_1} (y_{i1}), S_{2 \theta_2}(y_{i2}))}{\partial S_{2 \theta_2} (y_{i2})}(-f_{2 \theta_2}(y_{i2}))\Big)^{(1-\delta_{i1})\delta_{i2}}\nonumber\\
+\Big(-\frac{\partial C_\phi(S_{1 \bth} (y_{i1}), S_{2 \bthe}(y_{i2}))}{\partial S_{2 \bthe} (y_{i2})}(-f_{2 \bthe}(y_{i2}))\Big)^{(1-\delta_{i1})\delta_{i2}}\nonumber\\
 &&
-(C_\phi(S_{1 \theta_1} (y_{i1}), S_{2 \theta_2}(y_{i2})))^{(1-\delta_{i1}) (1-\delta_{i2})} .
+(C_\phi(S_{1 \bth} (y_{i1}), S_{2 \bthe}(y_{i2})))^{(1-\delta_{i1}) (1-\delta_{i2})} ,
 \end{eqnarray}
 where $c_{\phi}(.,.)$ is the second derivative of the copula function $C_{\phi}(.,.)$ defined in equation \ref{eq:clay}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Proposed Methodology}
 \label{sec:method}
 \noindent
-There are mainly two developed approaches to solve the estimation problem. \cite{shih:louis:1995} proposed a two step procedure.  They first assume independence between failure times and estimate the marginals and then estimate the dependency parameter $\phi$ assuming the estimated marginals are fixed. The Bayesian approach simultaneously estimates ($\mathbf{\theta_1}, \mathbf{\theta_2}, \phi$) from joint posterior distribution. The issue with the first approach is the unnatural assumption of independence to begin with. In the second case finding appropriate prior of $\phi$  is difficult because of complicated range depending on which copula family is being used. The dependency parameter for Clayton copula, for example, has the range $ (-1, \infty)\setminus \{0\}$. \\
-We start by putting appropriate priors on $\mathbf{\theta_1}$ and $\mathbf{\theta_2}$. Let $\pi(\mathbf{\theta_1})$ and $\pi(\mathbf{\theta_2})$ be the priors on $\mathbf{\theta_1}$ and $\mathbf{\theta_2}$. Then for fixed $\phi$, the joint posterior density of $\mathbf{\theta_1}$ and $\mathbf{\theta_2}$ is given by,
+There are mainly two developed approaches to solve the estimation problem. \cite{shih:louis:1995} proposed a two step procedure.  They first assume independence between failure times and estimate the marginals and then estimate the dependency parameter $\phi$ assuming the estimated marginals are fixed. The Bayesian approach simultaneously estimates ($\mathbf{\bth}, \mathbf{\bthe}, \phi$) from joint posterior distribution. The issue with the first approach is the unnatural assumption of independence to begin with. In the second case finding appropriate prior of $\phi$  is difficult because of complicated range depending on which copula family is being used. The dependency parameter for Clayton copula, for example, has the range $ (-1, \infty)\setminus \{0\}$. \\
+We start by putting appropriate priors on $\mathbf{\bth}$ and $\mathbf{\bthe}$. Let $\pi(\mathbf{\bth})$ and $\pi(\mathbf{\bthe})$ be the priors on $\mathbf{\bth}$ and $\mathbf{\bthe}$. Then for fixed $\phi$, the joint posterior density of $\mathbf{\bth}$ and $\mathbf{\bthe}$ is given by,
 \begin{equation}
   \label{eq:post}
-  \pi_\phi(\mathbf{\theta_1}, \mathbf{\theta_2} | \y, \de) = \frac{L(\mathbf{\theta_1}, \mathbf{\theta_2}, \phi| \y, \de) \pi(\mathbf{\theta_1})
-\pi(\mathbf{\theta_2})}{m_{\phi}(\y, \de)}, \;\;(\mathbf{\theta_1}, \mathbf{\theta_2}) \in \Theta
+  \pi_\phi(\mathbf{\bth}, \mathbf{\bthe} | \y, \de) = \frac{L(\mathbf{\bth}, \mathbf{\bthe}, \phi| \y, \de) \pi(\mathbf{\bth})
+\pi(\mathbf{\bthe})}{m_{\phi}(\y, \de)}, \;\;(\mathbf{\bth}, \mathbf{\bthe}) \in \Theta
 \end{equation}
 where $m_{\phi}(\y, \de)$ is the normalizing constant given by
 \[
-m_{\phi}(\y, \de) = \int_{\Theta} L(\mathbf{\theta_1}, \mathbf{\theta_2}, \phi| \y, \de) \pi(\mathbf{\theta_1})\pi(\mathbf{\theta_2}) d\mathbf{\theta_1} d\mathbf{\theta_2}.
+m_{\phi}(\y, \de) = \int_{\Theta} L(\mathbf{\bth}, \mathbf{\bthe}, \phi| \y, \de) \pi(\mathbf{\bth})\pi(\mathbf{\bthe}) d\mathbf{\bth} d\mathbf{\bthe}.
 \]
-Following \cite{roy:2014}, we select that value of $\phi \in G$ which maximizes the marginal likelihood of the data $m_{\phi}(\y, \de)$. Note that $m_{\phi}(\y, \de)$ is not available in closed form and needs to be estimated. Instead of maximizing $m_{\phi}(\y, \de)$, we choose to maximize $a \times m_{\phi}(\y, \de)$ as it is often easier to estimate. We choose ``$a$" as $1/m_{\phi_1}(\y, \de)$ for a pre fixed value $\phi_1$. Then by ergodic theorem we have a simple importance sampling consistent estimator of $B_{\phi,\phi_1}:= \frac{m_{\phi}(\y, \de)}{m_{\phi_1}(\y, \de)}$.
+Following \cite{roy:2014}, we select that value of $\phi \in G$ which maximizes the marginal likelihood of the data $m_{\phi}(\y, \de)$. Note that $m_{\phi}(\y, \de)$ is not available in closed form and needs to be estimated. Instead of maximizing $m_{\phi}(\y, \de)$, we choose to maximize $a \times m_{\phi}(\y, \de)$ as it is often easier to estimate. We choose ``$a$" as $1/m_{\phi_1}(\y, \de)$ for a pre fixed value $\phi_1$. Then by ergodic theorem, we have a simple importance sampling consistent estimator of $B_{\phi,\phi_1}:= \frac{m_{\phi}(\y, \de)}{m_{\phi_1}(\y, \de)}$.
 \begin{equation}
   \label{eq:simbf}
-\frac{1}{N} \sum_{l=1}^N \frac{L(\theta_1^{(l)}, \theta_2^{(l)}, \phi| \y, \de)}{L(\theta_1^{(l)}, \theta_2^{(l)}, \phi_1| \y, \de)} \stackrel{a.s.}{\rightarrow} \int_{\Theta} \frac{L(\theta_1, \theta_2, \phi| \y, \de)}{L(\theta_1, \theta_2, \phi| \y, \de)} \pi_{\phi_1}(\theta_1, \theta_2| \y, \de) d\theta_1 d\theta_2 =\frac{m_{\phi}(\y, \de)}{m_{\phi_1}(\y, \de)},
+\frac{1}{N} \sum_{l=1}^N \frac{L(\bth^{(l)}, \bthe^{(l)}, \phi| \y, \de)}{L(\bth^{(l)}, \bthe^{(l)}, \phi_1| \y, \de)} \stackrel{a.s.}{\rightarrow} \int_{\Theta} \frac{L(\bth, \bthe, \phi| \y, \de)}{L(\bth, \bthe, \phi| \y, \de)} \pi_{\phi_1}(\bth, \bthe| \y, \de) d\bth d\bthe =\frac{m_{\phi}(\y, \de)}{m_{\phi_1}(\y, \de)},
 \end{equation}
-as $N \rightarrow \infty$ where $\{\theta_1^{(l)}, \theta_2^{(l)}\}_{l=1}^{N}$  is a single Harris ergodic Markov chain with stationary density $\pi_{\phi_1}(\theta_1, \theta_2| \y, \de)$. So one $\it{single}$ MCMC sample $\{\theta_1^{(l)}, \theta_2^{(l)}\}_{l=1}^{N}$ from $\pi_{\phi_1}(\theta_1, \theta_2| \y, \de)$ is used to estimate $B_{\phi,\phi_1}$ for all $\phi \in G$. Once the association parameter is estimated, $\mathbf{\theta_1}$ and $\mathbf{\theta_2}$ are estimated using Markov Chain (Gibb's sampler) samples from $\pi_{\hat{\phi}}(\theta_1, \theta_2| \y, \de)$.
+as $N \rightarrow \infty$ where $\{\bth^{(l)}, \bthe^{(l)}\}_{l=1}^{N}$  is a single Harris ergodic Markov chain with stationary density $\pi_{\phi_1}(\bth, \bthe| \y, \de)$. So one $\it{single}$ MCMC sample $\{\bth^{(l)}, \bthe^{(l)}\}_{l=1}^{N}$ from $\pi_{\phi_1}(\bth, \bthe| \y, \de)$ is used to estimate $B_{\phi,\phi_1}$ for all $\phi \in G$. Once the association parameter is estimated, $\mathbf{\bth}$ and $\mathbf{\bthe}$ are estimated using Markov Chain (Gibb's sampler) samples from $\pi_{\hat{\phi}}(\bth, \bthe| \y, \de)$.
 
 \subsection{A two-stage procedure}
 \label{subsec:twostage}
 \noindent
-\cite{roy:2014} mentioned that the above estimate of $B_{\phi,\phi_1}$ although simple is often unstable. To remove this instability introduced due to an arbitrary choice of $\phi_1$, following \cite{doss:2010}, \cite{roy:2014} used generalized importance sampling method. Let $\phi_1, \phi_2, \dots, \phi_m \in G$ be $m$ appropriately chosen skeleton points. See \cite{roy:zhu:2014} for a discussion on how to choose the skeleton points. Let $\{\theta_1^{(j;l)}, \theta_2^{(j;l)}\}_{l=1}^{N_j}$ be a Markov chain with stationary density $\pi_{\phi_j}(\theta_1, \theta_2| \y, \de)$ for $j=1\dots,m$. Define $r_k = m_{\phi_k}(\y, \de)/ m_{\phi_1}(\y, \de) $ for
+\cite{roy:2014} mentioned that the above estimate of $B_{\phi,\phi_1}$ although simple is often unstable. To remove this instability introduced due to an arbitrary choice of $\phi_1$, following \cite{doss:2010}, \cite{roy:2014} used generalized importance sampling method. Let $\phi_1, \phi_2, \dots, \phi_m \in G$ be $m$ appropriately chosen skeleton points. See \cite{roy:zhu:2014} for a discussion on how to choose the skeleton points. Let $\{\bth^{(j;l)}, \bthe^{(j;l)}\}_{l=1}^{N_j}$ be a Markov chain with stationary density $\pi_{\phi_j}(\bth, \bthe| \y, \de)$ for $j=1\dots,m$. Define $r_k = m_{\phi_k}(\y, \de)/ m_{\phi_1}(\y, \de) $ for
 $k = 2, 3, \dots, m$, with $r_1=1$. Then $B_{\phi, \phi_1}$ is consistently estimated by
 \begin{equation}
   \label{eq:bf2}
-   \hat{B}_{\phi, \phi_1} = \sum_{j =1}^m \sum_{l =1}^{N_j} \frac{ L(\theta_1^{(j;l)}, \theta_2^{(j;l)}, \phi| \y, \de)}{\sum_{k =1}^m N_k L(\theta_1^{(j;l)}, \theta_2^{(j;l)}, \phi_k| \y, \de)/ \hat{r}_k},
+   \hat{B}_{\phi, \phi_1} = \sum_{j =1}^m \sum_{l =1}^{N_j} \frac{ L(\bth^{(j;l)}, \bthe^{(j;l)}, \phi| \y, \de)}{\sum_{k =1}^m N_k L(\bth^{(j;l)}, \bthe^{(j;l)}, \phi_k| \y, \de)/ \hat{r}_k},
 \end{equation}
 where $\hat {r}_1 =1$, $\hat{r}_k$, $k = 2, 3, \dots, m$ are consistent estimator of $r_k$'s obtained by the ``reverse logistic regression'' method proposed by \cite{geyer:1994} described in details in the next section.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Estimation of $\hat{r}_k$}
+\subsubsection{Estimation of $r_k$}
 \label{sec:revlog}
 \noindent
 Following \cite{geyer:1994}, $\hat{r}_k$ are estimated by maximizing the quasi-likelihood fucntion,
 \begin{equation}\label{func1}
-l_n(r) = \sum\limits_{j = 1}^m\sum\limits_{l = 1}^{N_j} \log p_j(X_{jl},r)
+l_n(r) = \sum\limits_{j = 1}^m\sum\limits_{l = 1}^{N_j} \log p_j(X_{jl},r),
 \end{equation}
-where $X_{jl} = (\theta_1^{(j;l)}, \theta_2^{(j;l)})$, $r = (r_1, r_2, \dots, r_m)$, $N_j$ is the number of MCMC samples with stationary density $\pi_{\phi_j}(\theta_1, \theta_2| \y, \de)$ corresponding to the skeletal point $\phi_j$, $j = 1, 2,..., m$ and the function $p_j(.,.)$ is defined below. To avoid identifiability issues, $\hat{r_1}$ is assumed to be 1. The function $p_j(.,.)$ is defined as,
+where $X_{jl} = (\bth^{(j;l)}, \bthe^{(j;l)})$, $r = (r_1, r_2, \dots, r_m)$, $N_j$ is the number of MCMC samples with stationary density $\pi_{\phi_j}(\bth, \bthe| \y, \de)$ corresponding to the skeletal point $\phi_j$, $j = 1, 2,..., m$ and the function $p_j(.,.)$ is defined below. To avoid identifiability issues, $\hat{r_1}$ is assumed to be 1. The function $p_j(.,.)$ is defined as,
 \begin{equation}
-p_j(X_{jl}, r) = \frac{L(\theta_1^{(jl)}, \theta_2^{(jl)}, \phi_j| \y, \de)e^{r_j}}{\sum\limits_{k = 1}^m L(\theta_1^{(jl)}, \theta_2^{(jl)}, \phi_k| \y, \de)e^{r_k}}
+p_j(X_{jl}, r) = \frac{L(\bth^{(jl)}, \bthe^{(jl)}, \phi_j| \y, \de)e^{r_j}}{\sum\limits_{k = 1}^m L(\bth^{(jl)}, \bthe^{(jl)}, \phi_k| \y, \de)e^{r_k}},
 \end{equation}
-where $\phi_k$ is the $k^{th}$ skeletal point and $\theta_i^{(jl)} = (\mu_i^{(jl)}, \sigma_i^{(jl)}, \xi_i^{(jl)})$, for $i = 1, 2$ is the $l^{th}$ MCMC sample of the chain with stationary density $\pi_{\phi_j}(\theta_1, \theta_2| \y, \de)$ corresponding to the skeletal point $\phi_j$, $j = 1, 2,..., m$ and $l = 1,...,N_j$.\\
-Hence the two-stage procedure for estimating $B_{\phi, \phi_1}$ and $\hat{\phi}$ is as follows. In the first stage, we run MCMC chains $\{\theta_1^{(j;l)}, \theta_2^{(j;l)}\}_{l=1}^{N_j}$ with invariant density $\pi_{\phi_j}(\theta_1, \theta_2| \y, \de)$, $j = 1, 2, ... , m$. We estimate $\hat{r}$ using these first stage posterior samples using the reverse logistic method as described in section \ref{sec:revlog}. In the second stage, independent of the first stage samples, we obtain $\it{new}$ samples $\{\theta_1^{(j;l)}, \theta_2^{(j;l)}\}_{l=1}^{N_j}$ from $\pi_{\phi_j}(\theta_1, \theta_2| \y, \de)$, $j = 1, 2, ... , m$ to estimate $B_{\phi, \phi_1}$ using equation (\ref{eq:bf2}). Finally, the estimate $\hat{\phi}$ where $\hat{B}_{\phi, \phi_1}$ attains maximum, can be obtained by an optimization procedure or simply looking at the plot of $\hat{B}_{\phi, \phi_1}$ against $\phi$.
+where $\phi_k$ is the $k^{th}$ skeletal point and $\theta_i^{(jl)} = (\mu_i^{(jl)}, \sigma_i^{(jl)}, \xi_i^{(jl)})$, for $i = 1, 2$ is the $l^{th}$ MCMC sample of the chain with stationary density $\pi_{\phi_j}(\bth, \bthe| \y, \de)$ corresponding to the skeletal point $\phi_j$, $j = 1, 2,..., m$ and $l = 1,...,N_j$.\\
+Hence the two-stage procedure for estimating $B_{\phi, \phi_1}$ and $\hat{\phi}$ are as follows. In the first stage, we run MCMC chains $\{\bth^{(j;l)}, \bthe^{(j;l)}\}_{l=1}^{N_j}$ with invariant density $\pi_{\phi_j}(\bth, \bthe| \y, \de)$, $j = 1, 2, ... , m$. We estimate $r$ using these first stage posterior samples using the reverse logistic method as described in section \ref{sec:revlog}. In the second stage, independent of the first stage samples, we obtain $\it{new}$ samples $\{\bth^{(j;l)}, \bthe^{(j;l)}\}_{l=1}^{N_j}$ from $\pi_{\phi_j}(\bth, \bthe| \y, \de)$, $j = 1, 2, ... , m$ to estimate $B_{\phi, \phi_1}$ using equation (\ref{eq:bf2}). Finally, the estimate $\hat{\phi}$ where $\hat{B}_{\phi, \phi_1}$ attains maximum, can be obtained by an optimization procedure or simply looking at the plot of $\hat{B}_{\phi, \phi_1}$ against $\phi$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Study}
 \label{sec:sim}
@@ -258,7 +260,7 @@ R package ``Copula" was used to generate samples from bivariate distribution wit
           = & \exp[-(1 + \xi \log t_i)_{+}^{\frac{1}{\xi}}]
 \end{split}\\
 \begin{split}
-\Rightarrow t_i = {} & \exp[\frac{- 1 + (-\log(1 - u_i))^{\xi}}{\xi}]
+\Rightarrow t_i = {} & \exp[\frac{- 1 + (-\log(1 - u_i))^{\xi}}{\xi}].
 \end{split}
 \end{align}
 \textbf{Case II: $\xi = 0$}
@@ -268,11 +270,11 @@ R package ``Copula" was used to generate samples from bivariate distribution wit
           = & \exp(-t_i)
 \end{split}\\
 \begin{split}
-\Rightarrow t_i = {} & - \log(1 - u_i)
+\Rightarrow t_i = {} & - \log(1 - u_i).
 \end{split}
 \end{align}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table}[h]
+\begin{table}[H]
 \caption{Naive Importance Sampling Results for simulated data}
 \centering
 \begin{tabular}{c c c c}
@@ -303,10 +305,10 @@ $\phi_{1}$ & $Param$      & Estimate[S.E.] & 95\% HPD\\
 \label{tab1}
 \end{table}
 \noindent
-A random sample of 1000 observations were generated following the above method. We selected true $\xi_1 = \xi_2 = 0.3$ and true $\phi = 5$. Censoring percentages in both $t_1$ and $t_2$ were taken to be about 12\%. 3000 MCMC samples were generated and the first 1000 were discarded as burnin. A uniform prior of (-0.7, 0.7) was considered for $\xi$.  Several initial values of $\phi_1$ were tried. The result of the simulation is displayed in Table \ref{tab1}.
+A random sample of 1000 observations were generated following the above method. We selected true $\xi_1 = \xi_2 = 0.3$ and true $\phi = 5$. The choice of $\xi$ were made keeping in mind that in practical scenarios $\xi$ rarely exceeds $[-0.5, 0.5]$ (See \cite{castillo:1997} and \cite{smith:1985}).  Censoring percentages in both $t_1$ and $t_2$ were taken to be about 12\%. 3000 MCMC samples were generated and the first 1000 were discarded as burnin. A uniform prior of (-0.7, 0.7) was considered for $\xi$.  Several initial values of $\phi_1$ were tried. The result of the simulation is displayed in Table \ref{tab1}. Note that due to emirical nature of the estimator, $\hat{\phi}$ has no standard error.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Estimation of Parameters}
-\begin{table}[h]
+\begin{table}[H]
 \caption{Estimation results for Generalized Importance Sampling}
 \centering
 \begin{tabular}{c c c }
@@ -315,14 +317,14 @@ $Param$      & Estimate[S.E.] & 95\% HPD\\
 \hline
 $\hat{\phi}$ &  5.212         & -\\
 $\hat{\tau}$ &  0.723         & -\\
-$\xi_1$      & 0.[0.018]        & (0.502,0.569)\\   
-$\xi_2$      & 0.540[0.015]        & (0.510,0.562)\\
+$\xi_1$      & 0.308[0.008]        & (0.290, 0.321)\\   
+$\xi_2$      & 0.311[0.008]        & (0.298, 0.326)\\
   \hline           
 \end{tabular}
 \label{tab2}
 \end{table}
 \noindent
-In order to use our multi chain importance sampling method, four skeletal points (2, 4, 6, 8) were selected. We simulated 1000 data points following the method described in section \ref{sec:sim}. The true value of $\phi$ was 5 and $\xi_1 = \xi_2 = 0.3$. For each of the four $\phi$, 3000 MCMC samples were generated. Using the MCMC samples, following \cite{geyer:1994}, first $\hat{r}_k$, $k = 2, 3, 4$ were estimated (we assume $hat{r}_1 = 1$ due to model identifiability issues) and then using them in the second stage, estimate of $\phi$ was obtained. Finally fixing $\phi$ as $\hat{\phi}$, $\xi_1$ and $\xi_2$ were estimated. Table \ref{tab2} provides the details.
+In order to use our multi chain importance sampling method, four skeletal points (2, 4, 6, 8) were selected. We simulated 1000 data points following the method described in section \ref{sec:sim}. The true value of $\phi$ was 5 and $\xi_1 = \xi_2 = 0.3$. For each of the four $\phi$, 3000 MCMC samples were generated. Using the MCMC samples, following \cite{geyer:1994}, first $r_k$, $k = 2, 3, 4$ were estimated (we assume $r_1 = 1$ due to model identifiability issues) and then using them in the second stage, estimate of $\phi$ was obtained. Finally fixing $\phi$ as $\hat{\phi}$, $\xi_1$ and $\xi_2$ were estimated. Table \ref{tab2} provides the details.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Note on Monte Carlo Simulation}
 \label{sec:note1}
@@ -331,11 +333,11 @@ Since the extreme value distributions have inter dependent parameters, i.e., the
 We define the bounds for each of the parameters in the following way:\\
 For $\xi$, define $\nu_i = \log y_i - \mu_i, \; i = 1,.., n$. We assume $n$ is the sample size and the standard assumption that $\sigma > 0$ also holds. The parameters $\xi_1$ and $\xi_2$ will have similar bounds. Then,
 \[
-max(-1, max_{1 \le i \le n}[-\frac{\sigma}{\nu_i}\mathbbm{1}_{\nu_i > 0}]) < \xi < min(1, min_{1 \le i \le n}[-\frac{\sigma}{\nu_i}\mathbbm{1}_{\nu_i < 0}])
+max(-1, max_{1 \le i \le n}[-\frac{\sigma}{\nu_i}\mathbbm{1}_{\nu_i > 0}]) < \xi < min(1, min_{1 \le i \le n}[-\frac{\sigma}{\nu_i}\mathbbm{1}_{\nu_i < 0}]).
 \]
 For $\sigma$, define $\zeta_i = \xi (\log y_i - \mu_i), \; i = 1,..., n$. As before, parameters $\sigma_1$ and $\sigma_2$ will have similar bounds. Then,
 \[
-\sigma > max( 0, max_{1 \le i \le n}(-\zeta_i))
+\sigma > max( 0, max_{1 \le i \le n}(-\zeta_i)).
 \]
 For the intercept $\beta_0$, we define $A_i = \log y_i + \frac{\sigma}{\xi} - \beta_1 Z_i$. For $\xi > 0$, $\beta_0 \in (-\infty, min A_i)$. For $\xi < 0$, $\beta_0 \in (max A_i, \infty)$.\\
 For the slope $\beta_1$, define $B_i = \frac{\log y_i + \frac{\sigma}{\xi} - \beta_0 }{Z_i}$. For $\xi > 0$, $\beta_1 \in (-\infty, min B_i)$. For $\xi < 0$, $\beta_1 \in (max B_i, \infty)$. Note that these bounds hold for postive $Z_i, \; i = 1,...,n$. Further adjustments are needed in case the covariate can take negative values. 
@@ -343,19 +345,19 @@ For the slope $\beta_1$, define $B_i = \frac{\log y_i + \frac{\sigma}{\xi} - \be
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Note on Implementation of the Algorithm}
 \noindent
-In practice, often log likelihood function is used instead of likelihood for scaling issues and also to obtain a simplified form of the full data likelihood. While estimating $\hat{r}_k$ or $\hat{B}_{\phi, \phi_1}$ function in the estimation procedure, using likelihood can be a deterrent due to the large magnitude of the evaluated likelihood. One way around this problem is to deal with log likelihood and consider maximizing:
+In practice, often log likelihood function is used instead of likelihood for scaling issues and also to obtain a simplified form of the full data likelihood. While estimating $r_k$ or $B_{\phi, \phi_1}$ function in the estimation procedure, using likelihood can be a deterrent due to the large magnitude of the evaluated likelihood. One way around this problem is to deal with log likelihood and consider maximizing:
 \begin{equation}
 l_n(r) = \sum\limits_{j = 1}^m\sum\limits_{l = 1}^{N_j} \log p_j(X_{jl},r)
 \end{equation}
 where,
 \begin{align}
 \begin{split}
-p_j(X_{jl},r) = {} & \frac{1}{\frac{\sum\limits_{k=1}^{m} e^{L^{*}(\theta_1^{(jl)}, \theta_2^{(jl)}, \phi_k| \y, \de)}e^{r_k}}  {e^{L^{*}(\theta_1^{(jl)}, \theta_2^{(jl)}, \phi_j| \y, \de)e^{r_j}}}}\\
-= & \frac{1}{\sum\limits_{k=1}^{m} \frac{ e^{L^{*}(\theta_1^{(jl)}, \theta_2^{(jl)}, \phi_k| \y, \de)}e^{r_k}}  {e^{L^{*}(\theta_1^{(jl)}, \theta_2^{(jl)}, \phi_j| \y, \de)e^{r_j}}}}\\
+p_j(X_{jl},r) = {} & \frac{1}{\frac{\sum\limits_{k=1}^{m} e^{L^{*}(\bth^{(jl)}, \bthe^{(jl)}, \phi_k| \y, \de)}e^{r_k}}  {e^{L^{*}(\bth^{(jl)}, \bthe^{(jl)}, \phi_j| \y, \de)e^{r_j}}}}\\
+= & \frac{1}{\sum\limits_{k=1}^{m} \frac{ e^{L^{*}(\bth^{(jl)}, \bthe^{(jl)}, \phi_k| \y, \de)}e^{r_k}}  {e^{L^{*}(\bth^{(jl)}, \bthe^{(jl)}, \phi_j| \y, \de)e^{r_j}}}}\\
 = & \bigg[\sum\limits_{k=1}^{m} e^{L^*_k - L^*_j} e^{r_k - r_j}\bigg]^{-1},
 \end{split}
 \end{align}
-where $L^*_k = L^{*}(\theta_1^{(jl)}, \theta_2^{(jl)}, \phi_k| \y, \de) = \log  L(\theta_1^{(jl)}, \theta_2^{(jl)}, \phi_k| \y, \de)$. Depending on the converged MCMC chains, the quantity $L^*_k - L^*_j$ should not be overly large and hence the maximization can be carried out. Similar technique can be applied to estimation of maximization of the function $\hat{B}_{\phi, \phi_1}$ while implementing the second stage of the proposed procedure in the log likelihood function. 
+where $L^*_k = L^{*}(\bth^{(jl)}, \bthe^{(jl)}, \phi_k| \y, \de) = \log  L(\bth^{(jl)}, \bthe^{(jl)}, \phi_k| \y, \de)$. Depending on the converged MCMC chains, the quantity $L^*_k - L^*_j$ should not be overly large and hence the maximization can be carried out. Similar technique can be applied to estimation of maximization of the function $B_{\phi, \phi_1}$ while implementing the second stage of the proposed procedure in the log likelihood function. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Application to Diabetes Retinopathy Study Data}
 \label{sec:drs}
@@ -364,10 +366,10 @@ We consider the well known Diabetes Retinopathy Study (DRS) data for our analyse
 It has been shown that 90\% of patients who have been diabetic for more than a decade will evetually develop retinopathy, or an ocular manifestation of blindness. The Diabetes Retinopathy Study (DRS) data consists of 197 patients wth severe retinopathy affecting the eye. For each patient, the data records a treated eye and a control, untreated eye. Time from detection till blindness is the response variable. One or both eye may be censored. The censoring happens in approximately 79\% of the treated eyes and 49\% of the untreated eyes. Age at the onset of diabetes is considered as a covariate.\\ 
 \noindent
 \cite{huster:brookmeyer:self:1989} analyzed the data using a frequentist approach with the Clayton copula family and Weibull marginal distributions. \cite{th:gram:2000} considered a random effects frailty model and \cite{sahu:dey:2000} considered exponential and Weibull bivariate distributions with a Bayesian approach. \cite{romeo:tanaka:2006} considered copulas to model the dependency of the data and follow the same two step procedures outlined by \cite{shih:louis:1995}. \\
-Let us assume time to blindness for the $i^{th}$ patient, $i = 1,...,197$ is $y_j$. Then $\log y_j \sim GEV(\mu_j, \sigma_j, \xi_j)$, $j = 1,2$. The covariate ``age at the time of diagnosis" ($Z$) is included through $\mu_j = \beta_{0j} + \beta_{1j}Z,\; j = 1,2$. For simplicity, independent priors are considered on $\sigma, \xi$ and $\beta$. Since we know from subsection \ref{sec:note1}, that the values of the marginal parameters  $\sigma, \xi$ and $\beta$ are all interdependent, we adjust for the dependency by restricting the proposed parameter space within the Monte Carlo simulations. Also, we take $\sigma^2 \sim IG(a_{\sigma}, b_{\sigma})$ and $\xi \sim U(-a, a)$. We pick $a = 1$, $a_{\sigma} = 0.01, b_{\sigma} = 2$ . We put diffuse priors for $\beta_0$s and $\beta_1$s as N(0, 100). The choices of the hyper parameters are such that the posterior distribution is proper.\\
+Let us assume time to blindness for the $j^{th}$ eye of the $i^{th}$ patient, $i = 1,...,197$ is $y_{ij}$. Then $\log y_{ij} \sim GEV(\mu_{ij}, \sigma_j, \xi_j)$, $j = 1,2$. The covariate ``age at the time of diagnosis" ($Z$) is included through $\mu_{ij} = \beta_{0j} + \beta_{1j}Z_i,\; j = 1,2$. For simplicity, independent priors are considered on $\sigma, \xi$ and $\beta$. Since we know from subsection \ref{sec:note1}, that the values of the marginal parameters  $\sigma, \xi$ and $\beta$ are all interdependent, we adjust for the dependency by restricting the proposed parameter space within the Monte Carlo simulations. Also, we take $\sigma^2 \sim IG(a_{\sigma}, b_{\sigma})$ and $\xi \sim U(-a, a)$. We pick $a = 1$, $a_{\sigma} = 0.01, b_{\sigma} = 2$ . We put diffuse priors for $\beta_0$s and $\beta_1$s as N(0, 100). The choices of the hyper parameters are such that the posterior distribution is proper.\\
 For the first step, following the method outlined in section \ref{sec:method}, an arbitrary $\phi_1 = 3$ value was chosen. Several initial values of $\phi_1$ were tested, however not much difference was observed in the final estimates of the model parameters except the value of $\phi$. \\
 Next, using this $\phi_1$, we use the Gibbs sampler with Metropolis-Hastings steps to get the posterior samples for parameters. For this data set, we have 10,000 MCMC iterations. Convergence was checked using the trace plots, ergodic mean plots and the autocorrelation plots for all the parameters. And we find that 4,000 iterations are adequate as burn-in and every $5^{th}$ sample was chosen after thinning. Using 1,200 posterior samples, we then estimate the final $\phi$ value by maximizing $B_{\phi, \phi_1}$. Final estimates and HPD intervals for all 8 parameters were calculated based on the final estimated $\hat{\phi}$. The following table \ref{tab3} provides us the estimates for the parameters.
-\begin{table}[h]
+\begin{table}[H]
 \caption{Naive Importance Sampling Results for DRS data}
 \centering
 \begin{tabular}{c c c}
@@ -390,7 +392,7 @@ $\beta_{12}$      & 0.010[0.017]        & (-0.022, 0.042)\\
 \end{table}
 \noindent
 However, as the plot demonstrates the estimates obtained from the naive importance sampling are not stable and the function $B_{\phi, \phi_1}$ achieves it's maximum at different points for differnt initial starting values of $\phi_1$. \\
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.4]{plot1.pdf}
 \end{center}
@@ -398,7 +400,7 @@ However, as the plot demonstrates the estimates obtained from the naive importan
 \end{figure}
 \noindent
 In order to obtain stable estimates of the model parameters, following the method outlined in subsection \ref{subsec:twostage}, four skeletal points were chosen as $\phi_1= 0.2$, $\phi_2= 0.5$, $\phi_3= 1$, $\phi_4 = 3$. 10,000 MCMC samples were generated for each skeletal points and 4000 were considered as burn-in after checking for convergence and the chains were thinned every $5^{th}$ sample. The maximum likelihood estimates of the marginal parameters given the value of skeletal point $\phi$ were estimated by maximizing the log likelihood function and were considered as initial starting value for the MCMC simulations. Once all the four MCMC chains were obtained, the function (\ref{func1}) was maximized to obtain estimated $\hat{r}_j$ s. The estimated values of $\hat{r}_j$  were quite robust to the change in initial start values. The following table \ref{tab4} provides the values of $\hat{r}_j$. 
-\begin{table}[h]
+\begin{table}[H]
 \caption{Estimated $\hat{r}_j$ for DRS data}
 \centering
 \begin{tabular}{c c c c c}
@@ -413,7 +415,7 @@ $\hat{r}$ & 1&  0.679 &  1.445  & 7.867 \\
 
 \noindent
 Using the estimated $\hat{r}_j$ s, $\hat{B}_{\phi, \phi_1}$ was maximized as a function of $\phi$ and the final estimate $\hat{\phi}$ was obtained. Finally, using the estimated $\hat{\phi}$, the marginal parameters were determined using Gibb's sampling algorithm as done before in section \ref{sec:sim}. Table \ref{tab5} provides the final estimates of the model parameters. 
-\begin{table}[h]
+\begin{table}[H]
 \caption{Generalized Importance Sampling Results for DRS data}
 \centering
 \begin{tabular}{c c c}
