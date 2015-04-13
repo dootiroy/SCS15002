@@ -1,4 +1,13 @@
-rm(list=ls())
+#!/home/statsadmin/R/lib64/R/bin/Rscript
+
+rm(list = ls())
+args = commandArgs(trailingOnly = TRUE)
+seed = args[1]
+set.seed(seed)
+
+# This is where the output will be saved to
+fname <- paste("/home/droy/copula/cluster/output/phiest_", args[1], ".RData", sep="")
+
 library(coda)
 library(lme4)
 source("DRS_priors.R")
@@ -122,3 +131,5 @@ r <- c(1,r_est$par)
 # estimate final phi
 phi_est <- optimize(B_fin, lower = 0.2, upper = 4, maximum = TRUE,
                     H = H.list, eta = r, dlist = DRS, PARA = PARA, skel.points = skel.points)
+
+save(phi_est, r, file = fname)

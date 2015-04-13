@@ -275,48 +275,70 @@ R package ``Copula" was used to generate samples from bivariate distribution wit
 \end{align}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}[H]
-\caption{Naive Importance Sampling Results for simulated data}
+\caption{Naive Importance Sampling: Empirical Estimate of $\phi$ for Simulated Data}
+\centering
+\begin{tabular}{c c c c}
+\hline
+$\phi_{1}$ & $Param$      & Estimate\\
+\hline
+1.00          & $\phi$ & 5.2114\\
+2.00          & $\phi$ & 5.2116 \\
+4.00          & $\phi$ & 5.2116 \\
+6.00          & $\phi$ & 5.2115\\
+8.00         & $\phi$ & 5.2117 \\
+              \hline             
+\end{tabular}
+\label{tab11}
+\end{table}
+\begin{table}[H]
+\caption{Naive Importance Sampling: Posterior Estimates of Marginal Parameters for Simulated Data}
 \centering
 \begin{tabular}{c c c c}
 \hline
 $\phi_{1}$ & $Param$      & Estimate[S.E.] & 95\% HPD\\
-\hline
-1.00          & $\hat{\phi}$ & 5.2114              & -\\
-              & $\xi_1$      & 0.308[0.009]        & (0.293, 0.323)\\   
+\hline      
+1.00        & $\xi_1$      & 0.308[0.009]        & (0.293, 0.323)\\   
               & $\xi_2$      & 0.312[0.009]        & (0.299, 0.326)\\
               \hline 
-2.00          & $\hat{\phi}$ & 5.2116              & -\\
-              & $\xi_1$      & 0.308[0.008]        & (0.292,0.322)\\   
+2.00      & $\xi_1$      & 0.308[0.008]        & (0.292,0.322)\\   
               & $\xi_2$      & 0.312[0.006]        & (0.300,0.324)\\
               \hline
-4.00          & $\hat{\phi}$ & 5.2116              & -\\
-              & $\xi_1$      & 0.307[0.008]        & (0.291,0.321)\\   
+4.00     & $\xi_1$      & 0.307[0.008]        & (0.291,0.321)\\   
               & $\xi_2$      & 0.312[0.007]        & (0.300,0.321)\\
               \hline
-6.00          & $\hat{\phi}$ & 5.2115              & -\\
-              & $\xi_1$      & 0.308[0.008]        & (0.291,0.322)\\   
+6.00        & $\xi_1$      & 0.308[0.008]        & (0.291,0.322)\\   
               & $\xi_2$      & 0.310[0.009]        & (0.294,0.322)\\
               \hline
-8.00         & $\hat{\phi}$ & 5.2117              & -\\
-              & $\xi_1$      & 0.308[0.008]        & (0.294,0.322)\\   
+8.00       & $\xi_1$      & 0.308[0.008]        & (0.294,0.322)\\   
               & $\xi_2$      & 0.310[0.008]        & (0.295,0.326)\\
               \hline             
 \end{tabular}
 \label{tab1}
 \end{table}
 \noindent
-A random sample of 1000 observations were generated following the above method. We selected true $\xi_1 = \xi_2 = 0.3$ and true $\phi = 5$. The choice of $\xi$ were made keeping in mind that in practical scenarios $\xi$ rarely exceeds $[-0.5, 0.5]$ (See \cite{castillo:1997} and \cite{smith:1985}).  Censoring percentages in both $t_1$ and $t_2$ were taken to be about 12\%. 3000 MCMC samples were generated and the first 1000 were discarded as burnin. A uniform prior of (-0.7, 0.7) was considered for $\xi$.  Several initial values of $\phi_1$ were tried. The result of the simulation is displayed in Table \ref{tab1}. Note that due to emirical nature of the estimator, $\hat{\phi}$ has no standard error.
+A random sample of 1000 observations were generated following the above method. We selected true $\xi_1 = \xi_2 = 0.3$ and true $\phi = 5$. The choice of $\xi$ were made keeping in mind that in practical scenarios $\xi$ rarely exceeds $[-0.5, 0.5]$ (See \cite{castillo:1997} and \cite{smith:1985}).  Censoring percentages in both $t_1$ and $t_2$ were taken to be about 12\%. 3000 MCMC samples were generated and the first 1000 were discarded as burnin. A uniform prior of (-0.7, 0.7) was considered for $\xi$.  Several initial values of $\phi_1$ were tried. The result of the simulation is displayed in table \ref{tab11} and table \ref{tab1}. Note that due to emirical nature of the estimator, $\hat{\phi}$ has no standard error.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Estimation of Parameters}
 \begin{table}[H]
-\caption{Estimation results for Generalized Importance Sampling}
+\caption{Generalized Importance Sampling: Empirical Estimates of of $\phi$ for Simulated Data}
+\centering
+\begin{tabular}{c c c }
+\hline
+$Param$      & Estimate\\
+\hline
+$\phi$ &  5.212\\
+$\tau$ &  0.723 \\
+  \hline           
+\end{tabular}
+\label{tab21}
+\end{table}
+\begin{table}[H]
+\caption{Generalized Importance Sampling: Posterior Estimates of Marginal Parameters for Simulated Data}
 \centering
 \begin{tabular}{c c c }
 \hline
 $Param$      & Estimate[S.E.] & 95\% HPD\\
 \hline
-$\hat{\phi}$ &  5.212         & -\\
-$\hat{\tau}$ &  0.723         & -\\
 $\xi_1$      & 0.308[0.008]        & (0.290, 0.321)\\   
 $\xi_2$      & 0.311[0.008]        & (0.298, 0.326)\\
   \hline           
@@ -324,7 +346,7 @@ $\xi_2$      & 0.311[0.008]        & (0.298, 0.326)\\
 \label{tab2}
 \end{table}
 \noindent
-In order to use our multi chain importance sampling method, four skeletal points (2, 4, 6, 8) were selected. We simulated 1000 data points following the method described in section \ref{sec:sim}. The true value of $\phi$ was 5 and $\xi_1 = \xi_2 = 0.3$. For each of the four $\phi$, 3000 MCMC samples were generated. Using the MCMC samples, following \cite{geyer:1994}, first $r_k$, $k = 2, 3, 4$ were estimated (we assume $r_1 = 1$ due to model identifiability issues) and then using them in the second stage, estimate of $\phi$ was obtained. Finally fixing $\phi$ as $\hat{\phi}$, $\xi_1$ and $\xi_2$ were estimated. Table \ref{tab2} provides the details.
+In order to use our multi chain importance sampling method, four skeletal points (2, 4, 6, 8) were selected. We simulated 1000 data points following the method described in section \ref{sec:sim}. The true value of $\phi$ was 5 and $\xi_1 = \xi_2 = 0.3$. For each of the four $\phi$, 3000 MCMC samples were generated. Using the MCMC samples, following \cite{geyer:1994}, first $r_k$, $k = 2, 3, 4$ were estimated (we assume $r_1 = 1$ due to model identifiability issues) and then using them in the second stage, estimate of $\phi$ was obtained. Finally fixing $\phi$ as $\hat{\phi}$, $\xi_1$ and $\xi_2$ were estimated. Table \ref{tab21} and table \ref{tab2} provides the details.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Note on Monte Carlo Simulation}
 \label{sec:note1}
@@ -368,16 +390,28 @@ It has been shown that 90\% of patients who have been diabetic for more than a d
 \cite{huster:brookmeyer:self:1989} analyzed the data using a frequentist approach with the Clayton copula family and Weibull marginal distributions. \cite{th:gram:2000} considered a random effects frailty model and \cite{sahu:dey:2000} considered exponential and Weibull bivariate distributions with a Bayesian approach. \cite{romeo:tanaka:2006} considered copulas to model the dependency of the data and follow the same two step procedures outlined by \cite{shih:louis:1995}. \\
 Let us assume time to blindness for the $j^{th}$ eye of the $i^{th}$ patient, $i = 1,...,197$ is $y_{ij}$. Then $\log y_{ij} \sim GEV(\mu_{ij}, \sigma_j, \xi_j)$, $j = 1,2$. The covariate ``age at the time of diagnosis" ($Z$) is included through $\mu_{ij} = \beta_{0j} + \beta_{1j}Z_i,\; j = 1,2$. For simplicity, independent priors are considered on $\sigma, \xi$ and $\beta$. Since we know from subsection \ref{sec:note1}, that the values of the marginal parameters  $\sigma, \xi$ and $\beta$ are all interdependent, we adjust for the dependency by restricting the proposed parameter space within the Monte Carlo simulations. Also, we take $\sigma^2 \sim IG(a_{\sigma}, b_{\sigma})$ and $\xi \sim U(-a, a)$. We pick $a = 1$, $a_{\sigma} = 0.01, b_{\sigma} = 2$ . We put diffuse priors for $\beta_0$s and $\beta_1$s as N(0, 100). The choices of the hyper parameters are such that the posterior distribution is proper.\\
 For the first step, following the method outlined in section \ref{sec:method}, an arbitrary $\phi_1 = 3$ value was chosen. Several initial values of $\phi_1$ were tested, however not much difference was observed in the final estimates of the model parameters except the value of $\phi$. \\
-Next, using this $\phi_1$, we use the Gibbs sampler with Metropolis-Hastings steps to get the posterior samples for parameters. For this data set, we have 10,000 MCMC iterations. Convergence was checked using the trace plots, ergodic mean plots and the autocorrelation plots for all the parameters. And we find that 4,000 iterations are adequate as burn-in and every $5^{th}$ sample was chosen after thinning. Using 1,200 posterior samples, we then estimate the final $\phi$ value by maximizing $B_{\phi, \phi_1}$. Final estimates and HPD intervals for all 8 parameters were calculated based on the final estimated $\hat{\phi}$. The following table \ref{tab3} provides us the estimates for the parameters.
+Next, using this $\phi_1$, we use the Gibbs sampler with Metropolis-Hastings steps to get the posterior samples for parameters. For this data set, we have 10,000 MCMC iterations. Convergence was checked using the trace plots, ergodic mean plots and the autocorrelation plots for all the parameters. And we find that 4,000 iterations are adequate as burn-in and every $5^{th}$ sample was chosen after thinning. Using 1,200 posterior samples, we then estimate the final $\phi$ value by maximizing $B_{\phi, \phi_1}$. Final estimates and HPD intervals for all 8 parameters were calculated based on the final estimated $\hat{\phi}$. The following table \ref{tab31} provides us the emprical estimates for the dependency parameter and the estimate of the concordance measure and table \ref{tab3} provides the consequent posterior estimates of the marginal parameters after the MCMC sampling.
 \begin{table}[H]
-\caption{Naive Importance Sampling Results for DRS data}
+\caption{Naive Importance Sampling: Empirical Estimate of $\phi$ and $\tau$ for DRS data}
+\centering
+\begin{tabular}{c c}
+\hline
+$Param$      & Estimate\\
+\hline
+$\phi$ & 1.065 \\
+$\tau$ & 0.347\\
+ \hline             
+\end{tabular}
+\label{tab31}
+\end{table}
+
+\begin{table}[H]
+\caption{Naive Importance Sampling: Posterior Estimates of Marginal Parameters for DRS data}
 \centering
 \begin{tabular}{c c c}
 \hline
 $Param$      & Estimate[S.E.] & 95\% HPD\\
 \hline
-$\hat{\phi}$ & 1.065              & -\\
-$\hat{\tau}$ & 0.347              & -\\
 $\sigma_1$      & 1.012[0.153]        & (0.743, 1.323)\\   
 $\xi_1$      & 0.144[0.165]        & (-0.181, 0.426)\\
 $\sigma_2$ & 1.313[0.236]              & (0.911, 1.766)\\
@@ -391,10 +425,10 @@ $\beta_{12}$      & 0.010[0.017]        & (-0.022, 0.042)\\
 \label{tab3}
 \end{table}
 \noindent
-However, as the plot demonstrates the estimates obtained from the naive importance sampling are not stable and the function $B_{\phi, \phi_1}$ achieves it's maximum at different points for differnt initial starting values of $\phi_1$. \\
+However, as figure 1 demonstrates the estimates obtained from the naive importance sampling are not stable and the function $B_{\phi, \phi_1}$ achieves it's maximum at different points for differnt initial starting values of $\phi_1$. This unstablity becomes more pronounced as higher values of $\phi_1$ are used. \\
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{plot1.pdf}
+\includegraphics[scale=0.4]{plot1_new.jpeg}
 \end{center}
 \caption{Plot of $B_{\phi, \phi_1}$ against $\phi$}
 \end{figure}
@@ -414,30 +448,50 @@ $\hat{r}$ & 1&  0.679 &  1.445  & 7.867 \\
 \end{table}
 
 \noindent
-Using the estimated $\hat{r}_j$ s, $\hat{B}_{\phi, \phi_1}$ was maximized as a function of $\phi$ and the final estimate $\hat{\phi}$ was obtained. Finally, using the estimated $\hat{\phi}$, the marginal parameters were determined using Gibb's sampling algorithm as done before in section \ref{sec:sim}. Table \ref{tab5} provides the final estimates of the model parameters. 
+Using the estimated $\hat{r}_j$ s, $\hat{B}_{\phi, \phi_1}$ was maximized as a function of $\phi$ and the final estimate $\hat{\phi}$ was obtained. To obtain standard errors of the $\hat{\phi}$ and $\hat{\tau}$, 1000 independent MCMC simulations were condcuted and the final $\hat{\phi}$ is the average of the 1000 estimated $\hat{\phi}$s. Finally, using the estimated $\hat{\phi}$, the marginal parameters were determined using Gibb's sampling algorithm as done before in section \ref{sec:sim}. Table \ref{tab51} provides the empirical estimates of the dependency parameter $\phi$ and the concordance measure Kendall's $\tau$ while table \ref{tab5} provides the final estimates of the  marginal parameters of the model. 
+
 \begin{table}[H]
-\caption{Generalized Importance Sampling Results for DRS data}
+\caption{Generalized Importance Sampling: Empirical Estimate of $\phi$ and $\tau$ for DRS data}
+\centering
+\begin{tabular}{c c c}
+\hline
+$Param$      & Estimate[S.E.] & 95\% CI\\
+\hline
+$\phi$ & 2.017[0.042]            & (1.945, 2.098)\\
+$\tau$ & 0.502[0.005]             & (0.493, 0.512)\\
+ \hline             
+\end{tabular}
+\label{tab51}
+\end{table}
+
+\begin{table}[H]
+\caption{Generalized Importance Sampling: Posterior Estimates of Marginal Parameters for DRS data}
 \centering
 \begin{tabular}{c c c}
 \hline
 $Param$      & Estimate[S.E.] & 95\% HPD\\
 \hline
-$\hat{\phi}$ & 2.141              & -\\
-$\hat{\tau}$ & 0.517              & -\\
-$\sigma_1$      & 1.221[0.217]        & (0.814, 1.662)\\   
-$\xi_1$      & 0.216[0.162]        & (-0.112, 0.484)\\
-$\sigma_2$ & 1.539[0.257]              & (1.053, 2.026)\\
-$\xi_2$      & 0.190[0.162]        & (-0.143, 0.446)\\   
-$\beta_{01}$      & 2.666[0.326]        & (2.008, 3.243)\\
-$\beta_{11}$ & 0.026 [0.014]             & (-0.002, 0.055)\\
-$\beta_{02}$      & 2.669[0.4161]        & (1.809, 3.436)\\   
-$\beta_{12}$      & 0.019[0.019]        & (-0.015, 0.057)\\
+$\sigma_1$      & 1.176[0.196]        & (0.830, 1.599)\\   
+$\xi_1$      & 0.202[0.160]        & (-0.139, 0.455)\\
+$\sigma_2$ & 1.524[0.289]              & (1.032, 2.082)\\
+$\xi_2$      & 0.179[0.188]        & (-0.229, 0.486)\\   
+$\beta_{01}$      & 2.726[0.351]        & (1.983, 3.404)\\
+$\beta_{11}$ & 0.022 [0.015]             & (-0.005, 0.054)\\
+$\beta_{02}$      & 2.712[0.454]        & (1.754, 3.571)\\   
+$\beta_{12}$      & 0.017[0.020]        & (-0.017, 0.0561)\\
  \hline             
 \end{tabular}
 \label{tab5}
 \end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{plot2_new.jpeg}
+\end{center}
+\caption{Histogram of $\hat{\phi}$}
+\end{figure}
 \noindent
-The final estimate $\hat{\phi}$ is quite different from the simple importance sampling estimator obtained in table \ref{tab3}. In \cite{romeo:tanaka:2006}, the authors found the estimated $\hat{\phi}$ to be approximately 1.061. Our estimated $\hat{\phi}$ is higher but in the same direction. The estimated $\hat{\tau}$ is 0.517. It can be thus concluded that the marginal time to blindness for the patients eyes are indeed positively associated. The estimates of slopes of predictor Age are not significant for both the marginals. This finding agrees with Romeo and Tanaka (2006). 
+The final estimate $\hat{\phi}$ is quite different from the simple importance sampling estimator obtained in table \ref{tab31}. The stability of the final estimated $\phi$ was tested by including one additional $\phi_1 = 4.5$ as a skeletal point. The final estimate of $\phi$ obtained in the process was quite close to the estimated $\hat{\phi}$ (around 2.49). The standard error of the estimated $\hat{\phi}$ and $\hat{\tau}$ are calculated empirically from 100 independent MCMC simulations. As seen from the figure 2, the final estimates of $\phi$ are quite robust. In \cite{romeo:tanaka:2006}, the authors found the estimated $\hat{\phi}$ to be approximately 1.061. Our estimated $\hat{\phi}$ is higher but in the same direction. The estimated $\hat{\tau}$ is 0.502. It can be thus concluded that the marginal time to blindness for the patients eyes are indeed positively associated. The estimates of slopes of predictor Age are not significant for both the marginals. This finding agrees with Romeo and Tanaka (2006). 
 \section{Discussion}
 \label{sec:dis}
 \noindent

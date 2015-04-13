@@ -29,12 +29,13 @@ load("RESULTS/phi_1.RData")
 PARA3 <- samp
 load("RESULTS/phi_3.RData")
 PARA4 <- samp
-
+load("RESULTS/phi_4half.RData")
+PARA5 <- samp
 # Initialize skeletal points #####
-skel.points <- c(0.2,0.5,1,3)
-
+#skel.points <- c(0.2,0.5,1,3)
+skel.points <- c(0.2,0.5,1,3,4.5)
 # Make a list of all MCMC samples ####
-PARA <- list(PARA1, PARA2, PARA3, PARA4)
+PARA <- list(PARA1, PARA2, PARA3, PARA4, PARA5)
 H.list <- list()
 
 # Initialized the H matrix list which evaluates the log likelihood for every row of each MCMC chains ###
@@ -53,15 +54,16 @@ for(i in 1:nrow(PARA1)){
     }
   }
 }
-save(list = c("H.list"), file = "Hlist.RData")
+save(list = c("H.list"), file = "Hlist_1.RData")
 # When you have all PARA1-4, dont run the above section again and again. Using save(), 
 # save H.list and then just load it
 
 # estimate eta's / ri's with r1 = 1
-r_init <- c(5,4,1)
+#r_init <- c(5,4,1)
+r_init <- c(5,4,1,3)
 r_est <- optim(r_init, etafn, control = list(fnscale = -1), H=H.list)
 r <- c(1,r_est$par)
 
 # estimate final phi
-phi_est <- optimize(B_fin, lower = 0.2, upper = 4, maximum = TRUE,
+phi_est <- optimize(B_fin, lower = 0.2, upper = 5, maximum = TRUE,
                     H = H.list, eta = r, dlist = DRS, PARA = PARA, skel.points = skel.points)

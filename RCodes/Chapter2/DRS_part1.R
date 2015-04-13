@@ -23,12 +23,12 @@ X <- test[,4][test$treat==1]
 # Assuming initial value of phi = 3
 theta0 <- c(1, -0.01, 1, 0, 1.5, 0, 1.5, 0)
 res_mle <- optim(theta0, L_wrap2, , control = list(fnscale=-1,maxit=10000), x=X, y1=y1, 
-                 y2=y2, phi=2.140715, delta1=delta1, delta2=delta2, n=n, hessian = TRUE)
+                 y2=y2, phi=2.017, delta1=delta1, delta2=delta2, n=n, hessian = TRUE)
 
 ## Getting MCMC samples of theta1 and theta2 for fixed phi1
 
 # phi here is phi1
-phi <- 2.140715
+phi <- 2.017
 phi1 <- phi
 
 ## Choose hyperparameters
@@ -97,7 +97,7 @@ acceptance.rate
 
 ###########################################
 # file <- sprintf("C:/Desktop stuff/Copula GEV/phi_8.RData")
-file <- sprintf("RESULTS/phi_hatfin.RData")
+file <- sprintf("RESULTS/phiavg_final.RData")
 save(samp,file=file)
 ###########################################
 #posterior mean and sd for beta0, beta1, alpha.
@@ -120,6 +120,8 @@ load("RESULTS/phi_1pt8.RData")
 PARA5 <- samp
 load("RESULTS/phi_2pt4.RData")
 PARA6 <- samp
+load("RESULTS/phi_4half.RData")
+PARA7 <- samp
 ### Estimating phi_hat by maximizing B_phi_phi1 ####
 phi1 <- 3
 phi_hat <- optimize(f = B ,phi1=phi1,PARA=PARA4,y1=y1,y2=y2,delta1=delta1,
@@ -128,31 +130,57 @@ phi_hat <- optimize(f = B ,phi1=phi1,PARA=PARA4,y1=y1,y2=y2,delta1=delta1,
 ### Plot B_phi_phi1 with different values of phi1. Show 4 curves and show that they achieve maximum at different points.###
 
 phi_grid <- seq(0.2,3,0.1)
+phi_grid1 <- seq(0.2,3,0.1)
 B_vect <- Vectorize(B,"phi")
-y_vect1 <- B_vect(phi_grid,phi1=0.2,PARA=PARA1,y1=y1,y2=y2,delta1=delta1,delta2=delta2,n=n)
-y_vect2 <- B_vect(phi_grid,phi1=0.5,PARA=PARA2,y1=y1,y2=y2,delta1=delta1,delta2=delta2,n=n)
+# y_vect1 <- B_vect(phi_grid,phi1=0.2,PARA=PARA1,y1=y1,y2=y2,delta1=delta1,delta2=delta2,n=n)
+# y_vect2 <- B_vect(phi_grid,phi1=0.5,PARA=PARA2,y1=y1,y2=y2,delta1=delta1,delta2=delta2,n=n)
 y_vect3 <- B_vect(phi_grid,phi1=1,PARA=PARA3,y1=y1,y2=y2,delta1=delta1,delta2=delta2,n=n)
 y_vect4 <- B_vect(phi_grid,phi1=3,PARA=PARA4,y1=y1,y2=y2,delta1=delta1,delta2=delta2,n=n)
 y_vect5 <- B_vect(phi_grid,phi1=1.8,PARA=PARA5,y1=y1,y2=y2,delta1=delta1,delta2=delta2,n=n)
 y_vect6 <- B_vect(phi_grid,phi1=2.4,PARA=PARA6,y1=y1,y2=y2,delta1=delta1,delta2=delta2,n=n)
+#y_vect7 <- B_vect(phi_grid,phi1=4.5,PARA=PARA6,y1=y1,y2=y2,delta1=delta1,delta2=delta2,n=n)
+
 
 pdf(file = "plot1")
-plot(phi_grid, y_vect1, type="l",col="red", ylim = c(0,70), xlim =c(0,3),xlab = expression(phi),
+plot(phi_grid1, y_vect3, type="l",lty = 2, col="red", ylim=c(0, 250),xlim =c(0,3),xlab = expression(phi),
      ylab = expression('B'[phi][','][phi[1]]))
 # abline(h =1.38324, col="red")
 # abline(h =1, col="blue")
 # abline(h =2.366155, col="black")
-lines(phi_grid, y_vect2, col="blue")
-lines(phi_grid, y_vect3, col="black")
-lines(phi_grid, y_vect5, col="orange")
-lines(phi_grid, y_vect6, col="green")
-#lines(phi_grid, y_vect4, col="green")
+#lines(phi_grid, y_vect2, col="blue", type="b", lty = 2)
+lines(phi_grid, y_vect5, col="orange", type="l", lty = 3)
+lines(phi_grid, y_vect6, col="green", type="l", lty = 4)
+#lines(phi_grid, y_vect7, col="black",type="l", lty = 5)
+lines(phi_grid, y_vect4, col="black", type="l", lty = 5)
 #legend("topright",c(expression(phi*' = '*'0.2'),expression(phi*' = '*'0.5'),
 #                   expression(phi*' = '*'1'),expression(phi*' = '*'3')),col=c("red","blue","black","green"))
-legend("topright",c(expression(phi[1]*' = '*'0.2'),expression(phi[1]*' = '*'0.5'),
-expression(phi[1]*' = '*'1'),expression(phi[1]*' = '*'1.8'),expression(phi[1]*' = '*'2.4'))
-,lty = c(1,1,1,1,1),col= c("red","blue","black","orange","green"))
+# legend("topright",c(expression(phi[1]*' = '*'0.2'),expression(phi[1]*' = '*'0.5'),
+# expression(phi[1]*' = '*'1'),expression(phi[1]*' = '*'1.8'),expression(phi[1]*' = '*'2.4'))
+# ,lty = c(1,2,3,4,5),col= c("red","blue","black","orange","green"))
+
+legend("topright",c(expression(phi[1]*' = '*'1'),expression(phi[1]*' = '*'1.8'),
+                    expression(phi[1]*' = '*'2.4'),expression(phi[1]*' = '*'3') )
+       ,lty = c(2,4,5,3),col= c("red","orange","green","black"))
+
+# legend("topright",c(expression(phi[1]*' = '*'1.8'),expression(phi[1]*' = '*'2.4'),
+#                     expression(phi[1]*' = '*'3'),expression(phi[1]*' = '*'4.5') )
+#        ,lty = c(2,3,4,5),col= c("red","orange","green","black"))
 
 dev.off()
 
 # Lets test our Git repo
+pdf(file = "plot1_new")
+plot(phi_grid, y_vect3, type="l",lty = 2, ylim=c(0, 250),xlim =c(0,3),xlab = expression(phi),
+     ylab = expression('B'[phi][','][phi[1]]))
+
+lines(phi_grid, y_vect5, type="l", lty = 3)
+lines(phi_grid, y_vect6, type="l", lty = 4)
+lines(phi_grid, y_vect4, type="l", lty = 5)
+
+
+legend("topright",c(expression(phi[1]*' = '*'1'),expression(phi[1]*' = '*'1.8'),
+                    expression(phi[1]*' = '*'2.4'),expression(phi[1]*' = '*'3') )
+       ,lty = c(2,4,5,3))
+
+
+dev.off()
